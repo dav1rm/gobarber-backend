@@ -108,4 +108,34 @@ describe('UpdateProfile', () => {
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
+
+  it('should not be able update the profile from non-existing user', async () => {
+    await expect(
+      updateProfileService.execute({
+        user_id: 'non-existing',
+        name: 'John Doe',
+        email: 'johndoe@email.com',
+        old_password: 'different_password',
+        password: '123123',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to change the password to the old password', async () => {
+    const user = await fakeUsersRepository.create({
+      name: 'John Doe',
+      email: 'johndoe@email.com',
+      password: '123456',
+    });
+
+    await expect(
+      updateProfileService.execute({
+        user_id: user.id,
+        name: 'John Doe',
+        email: 'johndoe@email.com',
+        old_password: '123456',
+        password: '123456',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
 });

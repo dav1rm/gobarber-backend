@@ -61,6 +61,18 @@ class UpdateProfileService {
         throw new AppError('Old password does not match', 401);
       }
 
+      const checkNewPassword = await this.hashProvider.compareHash(
+        password,
+        user.password,
+      );
+
+      if (checkNewPassword) {
+        throw new AppError(
+          'The new password must be different from the old password',
+          401,
+        );
+      }
+
       user.password = await this.hashProvider.generateHash(password);
     }
 
