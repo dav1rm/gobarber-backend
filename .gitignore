@@ -8,4 +8,6 @@ coverage
 ormconfig.json
 
 tmp/*
+tmp/uploads/*
 !tmp/.gitkeep
+!tmp/uploads/.gitkeep
